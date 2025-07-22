@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
  "cells": [
   {
@@ -31,3 +32,14 @@
  "nbformat": 4,
  "nbformat_minor": 5
 }
+=======
+import streamlit as st 
+import joblib
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+st.title('🧬 PANCREATIC CANCER PREDICTION APP')
+
+>>>>>>> de9041523836f9aa0b5bca4cc4b67e7bd4f4152e
