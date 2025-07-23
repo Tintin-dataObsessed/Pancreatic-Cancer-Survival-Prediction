@@ -54,7 +54,7 @@ class ModelLoader:
             return None
 
 # Title and description
-st.title("🩺 Pancreatic Cancer Molecular Survival Predictor")
+st.title("🩺 Pancreatic Cancer Survival Predictor App")
 st.markdown("""
 This tool predicts survival outcomes based on tumor molecular characteristics 
 and demographic factors using a machine learning model.
