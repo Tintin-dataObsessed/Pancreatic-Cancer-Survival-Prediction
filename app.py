@@ -7,9 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import precision_recall_curve
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
-import xgboost
-print("Loading XGBoost version:", xgboost.__version__)
-
+import xgboost as xgb
 
 
 # Configuration
@@ -48,11 +46,10 @@ class ModelLoader:
 
     @staticmethod
     def load_model(filepath):
-        """Load the prediction model"""
+        """Load the XGBoost model saved via .save_model()"""
         try:
-            model = joblib.load(filepath)
-            if not hasattr(model, 'predict_proba'):
-                raise ValueError("Model must have predict_proba method")
+            model = xgb.XGBClassifier()
+            model.load_model(filepath)
             return model
         except Exception as e:
             st.error(f"Model loading failed: {str(e)}")
@@ -69,7 +66,7 @@ and demographic factors using a machine learning model.
 with st.spinner('Loading predictive models...'):
     scaler = ModelLoader.load_scaler('scaler.pkl')
     encoder = ModelLoader.load_encoder('target_encoder.pkl')
-    model = ModelLoader.load_model('pancreatic_cancer_survival_model.pkl')
+    model = ModelLoader.load_model('pancreatic_cancer_survival_model.json')
 
 # Check if models loaded successfully
 if None in [scaler, encoder, model]:
