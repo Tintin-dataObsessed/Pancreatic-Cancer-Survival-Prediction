@@ -6,6 +6,7 @@ def install(package):
 
 install("joblib")
 install("scikit-learn")
+install("xgboost")
 
 import streamlit as st
 import joblib
