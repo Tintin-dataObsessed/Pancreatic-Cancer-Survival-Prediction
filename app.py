@@ -7,7 +7,6 @@ def install(package):
 install("joblib")
 install("scikit-learn")
 
-import joblib
 import streamlit as st
 import joblib
 import numpy as np
