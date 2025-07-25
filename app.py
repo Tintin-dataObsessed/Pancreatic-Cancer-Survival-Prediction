@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import precision_recall_curve
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
+import xgboost
+print("Loading XGBoost version:", xgboost.__version__)
+
+
 
 # Configuration
 st.set_page_config(
