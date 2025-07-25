@@ -21,7 +21,11 @@ class ModelLoader:
         """Load and validate the StandardScaler"""
         try:
             scaler = joblib.load(filepath)
+
             required_attrs = ['mean_', 'scale_', 'feature_names_in_', 'n_features_in_']
+            for attr in required_attrs:
+                print(attr, "present:", hasattr(scaler, attr))
+
             if not all(hasattr(scaler, attr) for attr in required_attrs):
                 raise ValueError("Loaded scaler is missing required attributes")
             return scaler
