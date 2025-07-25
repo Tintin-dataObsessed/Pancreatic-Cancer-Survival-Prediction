@@ -1,4 +1,3 @@
-
 import streamlit as st
 import joblib
 import numpy as np
@@ -31,26 +30,17 @@ class ModelLoader:
             return None
 
     @staticmethod
-    def load_scaler(filepath):
-        """Load and validate the StandardScaler"""
+    def load_encoder(filepath):
+        """Load and validate the LabelEncoder"""
         try:
-            scaler = joblib.load(filepath)
-            
-            # Required core attributes
-            required_attrs = ['mean_', 'scale_', 'n_features_in_']
-            if not all(hasattr(scaler, attr) for attr in required_attrs):
-                raise ValueError("Loaded scaler is missing core attributes")
-                
-            # Optional feature names (only validate if present)
-            if hasattr(scaler, 'feature_names_in_'):
-                if len(scaler.feature_names_in_) != scaler.n_features_in_:
-                    raise ValueError("Feature names don't match feature count")
-                    
-            return scaler
+            encoder = joblib.load(filepath)
+            if not hasattr(encoder, 'classes_'):
+                raise ValueError("Loaded encoder is missing classes_ attribute")
+            return encoder
         except Exception as e:
-            st.error(f"Scaler loading failed: {str(e)}")
+            st.error(f"Encoder loading failed: {str(e)}")
             return None
-        
+
     @staticmethod
     def load_model(filepath):
         """Load the XGBoost model saved via .save_model()"""
