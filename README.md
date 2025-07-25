@@ -28,11 +28,6 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 
 ### 2. Exploratory Data Analysis (EDA)
 
-This included filtering for specifically Pancreatic cancer.
-Dropping columns that will not be used and identifying missing values eg Nulls.
-
-### 3. Exploratory Data Analysis (EDA)
-
 Initial EDA provided insights into Age, common tumor sites, and feature distributions. 
 
 #### Age distribution of the patients
@@ -44,10 +39,10 @@ Initial EDA provided insights into Age, common tumor sites, and feature distribu
 #### Smoking History vs Survival
 <img src="https://github.com/user-attachments/assets/50a736c0-52ac-4dd5-9f6a-3ff6335c969a" width="600"/>
 
-### 4. Model Development
+### 3. Model Development
 Three classification models were developed and evaluated:
 
-#### 4.1 Logistic Regression
+#### 3.1 Logistic Regression
 
 As a baseline model, Logistic Regression is simple, fast, and interpretable. Its main strength lies in the clear understanding of coefficients and their impact on predictions.
 
@@ -63,7 +58,7 @@ Random Forests are ensemble models that aggregate multiple decision trees to imp
 * Weaknesses : It still struggles with class 0 , meaning many living patients are misclassified as deceased.
 * Overall: AUC-ROC improved to 0.7902 compared to Logistic Regression.
 
-#### 4.3 XGBoost Classifier
+#### 3.3 XGBoost Classifier
 
 XGBoost is a powerful gradient boosting framework designed to handle structured and imbalanced datasets. It generally outperforms simpler models in complex tasks.
 
