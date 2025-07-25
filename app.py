@@ -3,11 +3,9 @@ import streamlit as st
 import joblib
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.metrics import precision_recall_curve
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
-import xgboost as xgb
+import xgboost as XGBClassifier
 
 
 # Configuration
