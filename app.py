@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import precision_recall_curve
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
-import xgboost as XGBClassifier
+import xgboost as xgb
 
 
 # Configuration
