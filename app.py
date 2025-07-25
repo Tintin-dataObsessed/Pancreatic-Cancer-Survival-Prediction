@@ -66,7 +66,7 @@ and demographic factors using a machine learning model.
 with st.spinner('Loading predictive models...'):
     scaler = ModelLoader.load_scaler('scaler.pkl')
     encoder = ModelLoader.load_encoder('target_encoder.pkl')
-    model = ModelLoader.load_model('pancreatic_cancer_survival_model.json')
+    model = ModelLoader.load_model('pancreatic_cancer_survival_model.pkl')
 
 # Check if models loaded successfully
 if None in [scaler, encoder, model]:
