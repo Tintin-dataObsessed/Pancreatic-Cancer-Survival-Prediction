@@ -34,10 +34,10 @@ Initial EDA provided insights into Age, common tumor sites, and feature distribu
 <img src="https://github.com/user-attachments/assets/7dce2ab6-2700-475b-98ec-545a48e4b78f" width="600"/>
 
 #### Distribution of Patient Status
-<img src="https://github.com/user-attachments/assets/1ff7b8c3-f0ce-4f99-8307-a7957399a461" width="705" height="537" alt="Picture2"/>
+<img src="https://github.com/user-attachments/assets/1ff7b8c3-f0ce-4f99-8307-a7957399a461" width="600"/>
 
 #### Metastatic Site and Survival Status
-<img src="https://github.com/user-attachments/assets/6f5c993f-d398-4dab-8acf-964a390445dd" width="960" height="473" alt="Picture3"/>
+<img src="https://github.com/user-attachments/assets/6f5c993f-d398-4dab-8acf-964a390445dd" width="600"/>
 
 ### 3. Model Development
 Three classification models were developed and evaluated:
