@@ -30,14 +30,14 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 
 Initial EDA provided insights into Age, common tumor sites, and feature distributions. 
 
-#### Age distribution of the patients
+#### Overall Survival in Months
 <img src="https://github.com/user-attachments/assets/7dce2ab6-2700-475b-98ec-545a48e4b78f" width="600"/>
 
-#### Stage distribution with the survival metrics
-<img src="https://github.com/user-attachments/assets/dc1a52ac-5000-4f51-9d48-c1dcb7ebb8bf" width="600"/>
+#### Distribution of Patient Status
+<img src="https://github.com/user-attachments/assets/1ff7b8c3-f0ce-4f99-8307-a7957399a461" width="705" height="537" alt="Picture2"/>
 
-#### Smoking History vs Survival
-<img src="https://github.com/user-attachments/assets/50a736c0-52ac-4dd5-9f6a-3ff6335c969a" width="600"/>
+#### Metastatic Site and Survival Status
+<img src="https://github.com/user-attachments/assets/6f5c993f-d398-4dab-8acf-964a390445dd" width="960" height="473" alt="Picture3"/>
 
 ### 3. Model Development
 Three classification models were developed and evaluated:
