@@ -30,7 +30,7 @@ The dataset is sourced from the MSK-CHORD 2024 clinical-genomic database, compri
 
 Initial EDA provided insights into Age, common tumor sites, and feature distributions. 
 
-#### Overall Survival in Months
+#### Distribution of Patient Age
 <img src="https://github.com/user-attachments/assets/7dce2ab6-2700-475b-98ec-545a48e4b78f" width="600"/>
 
 #### Distribution of Patient Status
