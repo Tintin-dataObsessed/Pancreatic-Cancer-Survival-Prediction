@@ -1,81 +1,47 @@
 import streamlit as st
-import joblib
-import numpy as np
 import pandas as pd
-from sklearn.metrics import precision_recall_curve
-from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
-import xgboost as xgb
+import numpy as np
+import joblib
 
 
-# Configuration
-st.set_page_config(
-    page_title="Pancreatic Cancer Survival Predictor",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+st.set_page_config(page_title="Pancreatic Cancer Survival Prediction", layout="centered")
+st.title("🔬 Pancreatic Cancer Survival Prediction")
+st.markdown("Predict the likelihood of survival using clinical and genomic features.")
 
-# Custom model loader
-class ModelLoader:
-    @staticmethod
-    def load_scaler(filepath):
-        """Load and validate the StandardScaler"""
-        try:
-            scaler = joblib.load(filepath)
 
-            required_attrs = ['mean_', 'scale_', 'feature_names_in_', 'n_features_in_']
-            for attr in required_attrs:
-                print(attr, "present:", hasattr(scaler, attr))
+# ----------------------------
+# Load model and preprocessors
+# ----------------------------
 
-            if not all(hasattr(scaler, attr) for attr in required_attrs):
-                raise ValueError("Loaded scaler is missing required attributes")
-            return scaler
-        except Exception as e:
-            st.error(f"Scaler loading failed: {str(e)}")
-            return None
+@st.cache_resource
+def load_model():
+    try:
+        model = joblib.load("pancreatic_cancer_survival_model.pkl")
+        assert hasattr(model, "predict_proba"), "Model lacks predict_proba"
+        return model
+    except Exception as e:
+        st.error(f"Failed to load model: {e}")
+        return None
 
-    @staticmethod
-    def load_encoder(filepath):
-        """Load and validate the LabelEncoder"""
-        try:
-            encoder = joblib.load(filepath)
-            if not hasattr(encoder, 'classes_'):
-                raise ValueError("Loaded encoder is missing classes_ attribute")
-            return encoder
-        except Exception as e:
-            st.error(f"Encoder loading failed: {str(e)}")
-            return None
+@st.cache_resource
+def load_preprocessors():
+    try:
+        imputer = joblib.load("imputer.pkl")
+        scaler = joblib.load("scaler.pkl")
+        encoder = joblib.load("target_encoder.pkl")
+        return imputer, scaler, encoder
+    except Exception as e:
+        st.error(f"Failed to load preprocessors: {e}")
+        return None, None, None
 
-    @staticmethod
-    def load_model(filepath):
-        """Load the XGBoost model saved via .save_model()"""
-        try:
-            model = xgb.XGBClassifier()
-            model.load_model(filepath)
-            return model
-        except Exception as e:
-            st.error(f"Model loading failed: {str(e)}")
-            return None
+# Load all at once
+model = load_model()
+imputer, scaler, encoder = load_preprocessors()
 
-# Title and description
-st.title("🩺 Pancreatic Cancer Survival Predictor App")
-st.markdown("""
-This tool predicts survival outcomes based on tumor molecular characteristics 
-and demographic factors using a machine learning model.
-""")
+# ----------------------------
+# App Layout
+# ----------------------------
 
-# Load models
-with st.spinner('Loading predictive models...'):
-    scaler = ModelLoader.load_scaler('scaler.pkl')
-    encoder = ModelLoader.load_encoder('target_encoder.pkl')
-    model = ModelLoader.load_model('pancreatic_cancer_survival_model.pkl')
-
-# Check if models loaded successfully
-if None in [scaler, encoder, model]:
-    st.error("Critical error: Failed to load required models. Please contact support.")
-    st.stop()
-
-# Get feature names (assuming original features are in scaler)
-original_features = list(scaler.feature_names_in_)
 
 # Input form
 with st.form("patient_form"):
@@ -96,11 +62,23 @@ with st.form("patient_form"):
     
     submitted = st.form_submit_button("Predict Survival Outcome")
 
-# Prediction logic
+
+# ----------------------------
+# Process Prediction
+# ----------------------------
+
+scaler_columns = ['Current Age', 'Tumor Purity', 'Overall Survival (Months)', 'TMB (nonsynonymous)', 'Mutation Count', 'Fraction Genome Altered']
+
+model_feature_order = ['Current Age', 'Tumor Purity', 'Overall Survival (Months)',
+       'TMB (nonsynonymous)', 'Stage (Highest Recorded)', 'Mutation Count',
+       'Fraction Genome Altered']
+
+original_features = model_feature_order
+
 if submitted:
-    try:        
-        # Create DataFrame with all features including stage
-        all_features = pd.DataFrame({
+    try:
+        # Collect input into a DataFrame
+        input_df = pd.DataFrame({
             'Current Age': [current_age],
             'Tumor Purity': [tumor_purity],
             'Overall Survival (Months)': [overall_survival],
@@ -109,44 +87,41 @@ if submitted:
             'Mutation Count': [mutation_count],
             'Stage (Highest Recorded)': [stage]
         })
-        
-        # Separate features for scaling (exclude stage)
-        features_to_scale = all_features[original_features]
-        scaled_features = scaler.transform(features_to_scale)
-        
-        # Combine scaled features with stage for prediction
-        stage_encoded = pd.DataFrame({
-            'Stage (Highest Recorded)': [{"I": 1, "II": 2, "III": 3, "IV": 4}[stage]]
-        })
-        
-        # Combine all features for prediction
-        final_features = np.hstack([scaled_features, stage_encoded])
-        
-        # Get predicted probabilities
-        risk_score = model.predict_proba(final_features)[:, 1][0]
-        
-        # Risk stratification
+
+        # Ensure correct column order
+        input_df = input_df[model_feature_order]  # <-- make sure this matches your training set!
+
+        # Scale numerical columns only
+        input_scaled = input_df.copy()
+        input_scaled[scaler_columns] = scaler.transform(input_df[scaler_columns])
+
+
+        stage_mapping = {"I": 1, "II": 2, "III": 3, "IV": 4}
+        input_scaled["Stage (Highest Recorded)"] = input_scaled["Stage (Highest Recorded)"].map(stage_mapping)
+
+
+        # Convert to standard float type
+        input_scaled = input_scaled.astype(float)
+
+        # Predict risk score
+        risk_score = model.predict_proba(input_scaled)[:, 1][0]
         fixed_threshold = 0.4045
-        risk_label = 'High Risk' if risk_score >= fixed_threshold else 'Low Risk'
-        predicted_outcome = encoder.classes_[1] if risk_score >= fixed_threshold else encoder.classes_[0]
-        
+        risk_label = "High Risk" if risk_score >= fixed_threshold else "Low Risk"
+
         # Display results
         st.subheader("📊 Prediction Results")
-        
         cols = st.columns(3)
         with cols[0]:
-            st.metric("Risk Score", f"{float(risk_score):.1%}")
+            st.metric("Risk Score", f"{risk_score:.1%}")
         with cols[1]:
             st.metric("Risk Level", risk_label)
-        
-        # Progress bar 
-        st.progress(float(risk_score))
-        st.caption(f"Threshold for high risk: {fixed_threshold:.1%}")
+        with cols[2]:
+            st.metric("Threshold", f"{fixed_threshold:.1%}")
 
-        # Clinical interpretation
+        st.progress(float(risk_score))
+
         st.subheader("💡 Clinical Interpretation")
-        
-        if risk_label == 'Low Risk':
+        if risk_label == "Low Risk":
             st.success(f"""
             **Recommended Actions (Low Risk - Score < {fixed_threshold:.1%}):**
             - Standard therapeutic protocol
@@ -162,12 +137,14 @@ if submitted:
             - Consider clinical trials
             - 3-month monitoring intervals
             - Early supportive care
-            """)    
-        
+            """)
+
     except Exception as e:
         st.error(f"Prediction failed: {str(e)}")
 
-# Model information in sidebar
+       
+
+        # Model information in sidebar
 with st.sidebar:
     st.header("Model Information")
     st.markdown(f"""
@@ -176,7 +153,7 @@ with st.sidebar:
     - Features used: {len(original_features)} variables
     - Includes demographic and molecular factors
     """)
-    
+        
     st.markdown("---")
     st.markdown("""
     **Key Features:**
@@ -189,10 +166,10 @@ with st.sidebar:
     - Mutation Count
     """)
 
-# Footer
-st.markdown("---")
-st.caption("""
-**Disclaimer:** This tool provides statistical predictions only. 
-Clinical decisions should consider the full patient context. 
-Always consult oncology guidelines for treatment decisions.
-""")
+    # Footer
+    st.markdown("---")
+    st.caption("""
+    **Disclaimer:** This tool provides statistical predictions only. 
+    Clinical decisions should consider the full patient context. 
+    Always consult oncology guidelines for treatment decisions.
+    """)
