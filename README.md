@@ -130,7 +130,7 @@ The best model, tuned XGBoost , was saved for deployment.
 
 ---
 
-### Streamlit Application: [🌐 View the App](https://pancreatic-cancer-survival-prediction-cb68actwcpqrk45rrmiy2d.streamlit.app/)
+### Streamlit Application: [🌐 View the App](https://pancreatic-cancer-survival-prediction-a96rvwwkx55pmt95qwhjwa.streamlit.app/)
 
 ### Non-Technical Presentation : [📄 View the presentation](./Presentation.pdf)
 
