@@ -105,7 +105,7 @@ if submitted:
 
         # Predict risk score
         risk_score = model.predict_proba(input_scaled)[:, 1][0]
-        fixed_threshold = 0.4045
+        fixed_threshold = 0.4332
         risk_label = "High Risk" if risk_score >= fixed_threshold else "Low Risk"
 
         # Display results
@@ -149,7 +149,7 @@ with st.sidebar:
     st.header("Model Information")
     st.markdown(f"""
     **Model Characteristics:**
-    - Prediction threshold: 40.45%
+    - Prediction threshold: 43.32%
     - Features used: {len(original_features)} variables
     - Includes demographic and molecular factors
     """)
