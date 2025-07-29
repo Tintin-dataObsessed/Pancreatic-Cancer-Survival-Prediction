@@ -1,0 +1,11 @@
+[server]
+headless = true
+enableCORS = false
+port = 8502
+
+[theme]
+primaryColor = "#4A90E2"  # Light blue
+backgroundColor = "#F7F9FB"  # Soft grey-white
+secondaryBackgroundColor = "#FFFFFF"  # Clean white for cards
+textColor = "#2C2C2C"  # Deep grey for contrast
+font = "sans serif"

@@ -5,8 +5,8 @@ import joblib
 
 
 st.set_page_config(page_title="Pancreatic Cancer Survival Prediction", layout="centered")
-st.title("🔬 Pancreatic Cancer Survival Prediction")
-st.markdown("Predict the likelihood of survival using clinical and genomic features.")
+st.markdown("## Pancreatic Cancer Risk Identification and Treatment Recommendation")
+st.markdown("""Predict a patient’s risk of poor survival using clinical and genomic features this helps doctors identify high-risk individuals for timely intervention and more personalized care.""")
 
 
 # ----------------------------
@@ -173,3 +173,9 @@ with st.sidebar:
     Clinical decisions should consider the full patient context. 
     Always consult oncology guidelines for treatment decisions.
     """)
+
+    st.markdown("""
+    <p style='text-align: center; font-size: 12px;'>
+    Built by The Insight Lab
+    </p>
+    """, unsafe_allow_html=True)
