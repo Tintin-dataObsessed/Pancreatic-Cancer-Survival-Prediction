@@ -87,7 +87,7 @@ These results confirmed XGBoost as the best-performing model overall.
 
 ### 6. Threshold Tuning and Risk Stratification
 
-Rather than using the default 0.5 threshold, the model was optimized based on F1-score. The optimal threshold was found to be **0.4332**.
+Rather than using the default 0.5 threshold, the model was optimized based on F1-score. The optimal threshold was found to be **0.4045**.
 
 * At this threshold:
 
