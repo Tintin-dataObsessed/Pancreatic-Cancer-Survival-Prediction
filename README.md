@@ -116,7 +116,7 @@ The best model, tuned XGBoost , was saved for deployment.
 **Key Findings**
 
 - The majority of patients in the dataset did not survive, highlighting the need for early, data-driven risk prediction in pancreatic cancer.
-- The best-performing model (XGBoost with tuned threshold) achieved high recall (0.93) for identifying deceased patients — ideal for catching high-risk cases early.
+- The best-performing model (XGBoost with tuned threshold) achieved high recall (0.93) for identifying deceased patients, ideal for catching high-risk cases early.
 - Tumor stage ,mutation count, and MSI score were the most important features — emphasizing the role of genomic profiling in survival prediction.
 - Living patients were harder to predict accurately, suggesting missing or underrepresented recovery-related data.
 
